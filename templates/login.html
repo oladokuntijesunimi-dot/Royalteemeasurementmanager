@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Login · Royaltee Stitches</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#C9A84C;--ink:#1A1A2E;--cream:#FAF7F2;}
+body{font-family:'DM Sans',sans-serif;background:var(--ink);min-height:100vh;display:flex;align-items:stretch;}
+.split-left{
+  flex:1;background:var(--ink);display:flex;flex-direction:column;justify-content:center;
+  align-items:center;padding:48px;position:relative;overflow:hidden;
+}
+.split-left::before{
+  content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;
+  border-radius:50%;border:1px solid rgba(201,168,76,0.12);
+}
+.split-left::after{
+  content:'';position:absolute;bottom:-80px;left:-80px;width:300px;height:300px;
+  border-radius:50%;border:1px solid rgba(201,168,76,0.08);
+}
+.brand-mark{
+  width:72px;height:72px;background:var(--gold);border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;
+  color:var(--ink);margin-bottom:24px;position:relative;z-index:1;
+}
+.brand-name{
+  font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;
+  color:white;letter-spacing:0.04em;text-align:center;position:relative;z-index:1;
+}
+.brand-tagline{
+  font-size:13px;color:rgba(255,255,255,0.35);letter-spacing:0.14em;
+  text-transform:uppercase;margin-top:8px;text-align:center;position:relative;z-index:1;
+}
+.divider-line{
+  width:48px;height:1px;background:var(--gold);margin:24px auto;opacity:0.6;position:relative;z-index:1;
+}
+.brand-quote{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;
+  color:rgba(255,255,255,0.45);text-align:center;max-width:260px;line-height:1.6;
+  position:relative;z-index:1;
+}
+.split-right{
+  width:440px;background:var(--cream);display:flex;flex-direction:column;
+  justify-content:center;padding:56px 48px;
+}
+.form-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+.form-sub{font-size:14px;color:#6B6B80;margin-bottom:32px;}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:16px;}
+.form-group label{font-size:12px;font-weight:500;color:#4A4A65;letter-spacing:0.03em;}
+.form-group input{
+  padding:11px 14px;border:1.5px solid rgba(26,26,46,0.12);border-radius:10px;
+  font-size:14px;font-family:'DM Sans',sans-serif;color:var(--ink);background:white;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.form-group input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.15);}
+.btn-login{
+  width:100%;padding:12px;background:var(--gold);color:var(--ink);
+  border:none;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;
+  font-family:'DM Sans',sans-serif;letter-spacing:0.02em;transition:all .2s;margin-top:8px;
+}
+.btn-login:hover{background:#9B7A2E;color:white;}
+.form-footer{text-align:center;margin-top:20px;font-size:13px;color:#6B6B80;}
+.form-footer a{color:var(--gold);text-decoration:none;font-weight:500;}
+.alert-error{
+  background:#FDEDEC;color:#A93226;border:1px solid #F1948A;
+  padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:16px;
+}
+.hint-box{
+  background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);
+  border-radius:8px;padding:10px 14px;font-size:12px;color:#9B7A2E;margin-top:16px;
+}
+@media(max-width:700px){
+  .split-left{display:none;}
+  .split-right{width:100%;padding:40px 28px;}
+}
+</style>
+</head>
+<body>
+<div class="split-left">
+  <div class="brand-mark">RS</div>
+  <div class="brand-name">Royaltee Stitches</div>
+  <div class="brand-tagline">Premium Fashion & Tailoring</div>
+  <div class="divider-line"></div>
+  <div class="brand-quote">"Every stitch tells a story of elegance and precision."</div>
+</div>
+<div class="split-right">
+  <div class="form-title">Welcome back</div>
+  <div class="form-sub">Sign in to your measurement manager</div>
+  {% if error %}
+  <div class="alert-error">{{ error }}</div>
+  {% endif %}
+  <form method="POST">
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" name="username" placeholder="Enter your username" required autofocus>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Enter your password" required>
+    </div>
+    <button type="submit" class="btn-login">Sign in →</button>
+  </form>
+  <div class="form-footer">
+    Don't have an account? <a href="{{ url_for('register') }}">Create one</a>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}{% if customer %}Edit Record{% else %}New Record{% endif %} · Royaltee Stitches{% endblock %}
+{% block body %}
+<div class="topbar">
+  <div class="page-heading">{% if customer %}Edit Record{% else %}New Record{% endif %}</div>
+  <div class="topbar-actions">
+    <a href="{{ url_for('customers') }}" class="btn btn-outline">← Back</a>
+  </div>
+</div>
+<div class="content">
+  {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+  <form method="POST">
+    <!-- Customer Info -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="form-section-title">
+        Customer Information
+        <span>All measurements in inches</span>
+      </div>
+      <div class="form-grid-2" style="margin-bottom:14px">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" name="name" value="{{ customer.name if customer else '' }}" placeholder="e.g. Amara Johnson" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="text" name="phone" value="{{ customer.phone if customer else '' }}" placeholder="e.g. 0812 345 6789">
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" name="date" value="{{ customer.date if customer else '' }}">
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <input type="text" name="notes" value="{{ customer.notes if customer else '' }}" placeholder="Optional notes">
+        </div>
+      </div>
+    </div>
+
+    <!-- Measurements -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="blouse" onclick="switchTab('blouse')">Blouse</button>
+        <button type="button" class="tab-btn" data-tab="skirt" onclick="switchTab('skirt')">Skirt</button>
+        <button type="button" class="tab-btn" data-tab="gown" onclick="switchTab('gown')">Gown</button>
+        <button type="button" class="tab-btn" data-tab="trouser" onclick="switchTab('trouser')">Trouser</button>
+      </div>
+
+      <!-- BLOUSE -->
+      <div class="tab-panel active" id="tab-blouse">
+        <div class="form-grid">
+          {% set b = measurements.get('blouse', {}) %}
+          {% for field, label in [('back','Back'),('fulllen','Full Length'),('bust','Bust'),('chest','Chest'),('rwaist','Round Waist'),('wub','Waist Under Bust'),('bpt','Burst Point'),('nn','N–N'),('halflen','Half Length'),('slvlen','Sleeve Length'),('rslv','Round Sleeve')] %}
+          <div class="form-group">
+            <label>{{ label }}</label>
+            <input type="number" step="0.1" min="0" name="blouse_{{ field }}" value="{{ b.get(field,'') }}" placeholder="0.0">
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- SKIRT -->
+      <div class="tab-panel" id="tab-skirt">
+        <div class="form-grid">
+          {% set s = measurements.get('skirt', {}) %}
+          {% for field, label in [('len','Length'),('hip','Hip'),('waist','Waist')] %}
+          <div class="form-group">
+            <label>{{ label }}</label>
+            <input type="number" step="0.1" min="0" name="skirt_{{ field }}" value="{{ s.get(field,'') }}" placeholder="0.0">
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- GOWN -->
+      <div class="tab-panel" id="tab-gown">
+        <div class="form-grid">
+          {% set g = measurements.get('gown', {}) %}
+          {% for field, label in [('bust','Bust'),('ubust','Under-Bust'),('waist','Waist'),('hip','Hip'),('back','Back'),('shbpt','Shoulder to Bust Pt'),('nn','Nipple to Nipple'),('halflen','Half Length'),('rwaist','Round Waist'),('len','Gown Length'),('slv','Sleeve'),('rslv','Round Sleeve')] %}
+          <div class="form-group">
+            <label>{{ label }}</label>
+            <input type="number" step="0.1" min="0" name="gown_{{ field }}" value="{{ g.get(field,'') }}" placeholder="0.0">
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- TROUSER -->
+      <div class="tab-panel" id="tab-trouser">
+        <div class="form-grid">
+          {% set t = measurements.get('trouser', {}) %}
+          {% for field, label in [('waist','Waist'),('hip','Hip'),('thigh','Thigh (Lap)'),('knee','Knee'),('len','Length'),('bottom','Bottom'),('tight','Tight')] %}
+          <div class="form-group">
+            <label>{{ label }}</label>
+            <input type="number" step="0.1" min="0" name="trouser_{{ field }}" value="{{ t.get(field,'') }}" placeholder="0.0">
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;gap:10px">
+      <a href="{{ url_for('customers') }}" class="btn btn-outline">Cancel</a>
+      <button type="submit" class="btn btn-gold">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Record
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard · Royaltee Stitches{% endblock %}
+{% block body %}
+<div class="topbar">
+  <div class="page-heading">Dashboard</div>
+  <div class="topbar-actions">
+    <a href="{{ url_for('new_customer') }}" class="btn btn-gold">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      New Record
+    </a>
+  </div>
+</div>
+<div class="content">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num">{{ total }}</div>
+      <div class="stat-label">Total Customers</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">{{ blouse_count }}</div>
+      <div class="stat-label">Blouse Records</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">{{ gown_count }}</div>
+      <div class="stat-label">Gown Records</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">{{ other_count }}</div>
+      <div class="stat-label">Skirt & Trouser</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600">Recent Customers</div>
+      <a href="{{ url_for('customers') }}" class="btn btn-outline btn-sm">View all</a>
+    </div>
+    {% if customer_data %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Customer</th><th>Phone</th><th>Date</th><th>Garments</th><th>Actions</th></tr></thead>
+        <tbody>
+        {% for item in customer_data %}
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="avatar">{{ item.customer.name[:2].upper() }}</div>
+              <span style="font-weight:500">{{ item.customer.name }}</span>
+            </div>
+          </td>
+          <td style="color:#6B6B80">{{ item.customer.phone or '—' }}</td>
+          <td style="color:#6B6B80">{{ item.customer.date or '—' }}</td>
+          <td>
+            {% for t in item.types %}
+            <span class="badge badge-{{ t }}">{{ t.title() }}</span>
+            {% endfor %}
+          </td>
+          <td>
+            <div style="display:flex;gap:6px">
+              <a href="{{ url_for('view_customer', cid=item.customer.id) }}" class="btn btn-outline btn-sm">View</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">✂️</div>
+      <p>No customers yet. <a href="{{ url_for('new_customer') }}" style="color:var(--gold)">Add your first record</a></p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

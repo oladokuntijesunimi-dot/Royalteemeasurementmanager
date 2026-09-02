@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Customers · Royaltee Stitches{% endblock %}
+{% block body %}
+<div class="topbar">
+  <div class="page-heading">Customers</div>
+  <div class="topbar-actions">
+    <div class="search-wrap">
+      <svg class="search-icon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <form method="GET" style="display:inline">
+        <input type="text" name="q" value="{{ q }}" placeholder="Search customers..." onchange="this.form.submit()" style="padding-left:36px;width:260px;border:1.5px solid rgba(26,26,46,0.12);border-radius:10px;padding-top:9px;padding-bottom:9px;font-size:14px;outline:none;font-family:'DM Sans',sans-serif;background:white;color:#1A1A2E;">
+      </form>
+    </div>
+    <a href="{{ url_for('new_customer') }}" class="btn btn-gold">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      New Record
+    </a>
+  </div>
+</div>
+<div class="content">
+  <div class="card">
+    {% if customer_data %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Customer</th><th>Phone</th><th>Date</th><th>Notes</th><th>Garments</th><th>Actions</th></tr></thead>
+        <tbody>
+        {% for item in customer_data %}
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="avatar">{{ item.customer.name[:2].upper() }}</div>
+              <span style="font-weight:500">{{ item.customer.name }}</span>
+            </div>
+          </td>
+          <td style="color:#6B6B80">{{ item.customer.phone or '—' }}</td>
+          <td style="color:#6B6B80">{{ item.customer.date or '—' }}</td>
+          <td style="color:#6B6B80;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ item.customer.notes or '—' }}</td>
+          <td>
+            {% for t in item.types %}
+            <span class="badge badge-{{ t }}">{{ t.title() }}</span>
+            {% endfor %}
+          </td>
+          <td>
+            <div style="display:flex;gap:6px">
+              <a href="{{ url_for('view_customer', cid=item.customer.id) }}" class="btn btn-outline btn-sm">View</a>
+              <a href="{{ url_for('edit_customer', cid=item.customer.id) }}" class="btn btn-outline btn-sm">Edit</a>
+              <form method="POST" action="{{ url_for('delete_customer', cid=item.customer.id) }}" onsubmit="return confirm('Delete this record?')">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">🔍</div>
+      <p>No customers found{% if q %} for "{{ q }}"{% endif %}.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
