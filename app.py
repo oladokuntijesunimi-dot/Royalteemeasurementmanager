@@ -22,6 +22,9 @@ ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
 if not ADMIN_PASSWORD:
     raise RuntimeError('ADMIN_PASSWORD is missing. Set it in the .env file.')
 
+init_db()
+
+
 def get_db():
     conn = sqlite3.connect(DB)
     conn.row_factory = sqlite3.Row
